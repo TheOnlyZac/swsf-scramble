@@ -1,0 +1,6 @@
+__pycache__
+*.py[cod]
+
+matches.txt
+dictionary.txt
+out
