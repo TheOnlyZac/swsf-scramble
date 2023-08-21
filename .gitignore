@@ -1,7 +1,8 @@
 __pycache__
 *.py[cod]
-matches.txt
-dictionary.txt
-words.txt
+
+*.txt
+*.dict
+
 out
 ignore
