@@ -11,7 +11,6 @@ from scramble import swsf_scramble
 
 DEBUG = False
 
-#todo implement min length and writing to output file
 def dictionary_search(dict_file: str, goal_hashes: list, max_length: int = 8, min_length: int = 1, outfile: str = 'matches.txt') -> int:
     """
     Searches for a password in a dictionary file.
@@ -35,15 +34,18 @@ def dictionary_search(dict_file: str, goal_hashes: list, max_length: int = 8, mi
 
             if max_length != 0 and word_length > max_length:
                 continue
+                
+            if min_length != 0 and word_length < min_length:
+                continue
 
             word_hash = swsf_scramble(word)
-            #if DEBUG:
-            #    print(f'Checking {word} ({word_hash})')
 
             if word_hash in goal_hashes:
                 matches.append(f'{word} ({word_hash})')
-                #if DEBUG:
-                #    print(f'Match found: {word} ({word_hash})')
+
+    with open(outfile, 'w+', encoding='utf-8') as f:
+        f.write(f'---- Hash collisions for {goal_hashes} of length {min_length}-{max_length} ----\n')
+        f.write('\n'.join(matches))
 
     return matches
 
@@ -61,11 +63,11 @@ def brute_force_search(goal_hashes: list, max_length: int = 8, min_length = 1, o
 
     if outfile is not None:
         with open(outfile, 'w+', encoding='utf-8') as f:
-            f.write(f'---- Hash collisions for {goal_hashes} with length {max_length} or less ----\n')
+            f.write(f'---- Hash collisions for {goal_hashes} of length {min_length}-{max_length} ----\n')
 
     num_possible_words = 26**max_length - 26**(min_length-1)
 
-    if(max_length == min_length:
+    if max_length == min_length:
         print(f'Searching for codes matching {goal_hashes} with {max_length} letters...')
     else:
         print(f'Searching for codes matching {goal_hashes} between {min_length} and {max_length} letters...')
@@ -138,7 +140,7 @@ def main(argc, argv):
     dict_file = args.dict
     outfile = args.outfile
 
-    if max_length > min_length:
+    if max_length < min_length:
         print('Error: max length must be greater than or equal to min length.')
         return
     elif max_length < 0 or min_length < 0:
