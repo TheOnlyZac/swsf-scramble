@@ -4,7 +4,7 @@ author: theonlyzac
 date: August 21 2023
 version: 1.1
 
-Brute force searches for a password given a hash and a length.
+Finds codes containing words from a given dictionary.
 """
 import sys
 
