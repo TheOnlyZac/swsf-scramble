@@ -1,4 +1,4 @@
-# SWSF Scrambler Scripts
+# SWSF Scramble Scripts
 
 This module implements the cheat code scrambling algorithm from Star Wars: Jedi Starfighter. It can be used to generate code hashes and search for cheat codes by hash.
 
