@@ -1,3 +1,11 @@
+"""
+find_words_in_codes.py
+author: theonlyzac
+date: August 21 2023
+version: 1.1
+
+Brute force searches for a password given a hash and a length.
+"""
 import sys
 
 def find_strings_containing_words(strings_file, dict_file, min_length=0):
@@ -12,7 +20,7 @@ def find_strings_containing_words(strings_file, dict_file, min_length=0):
 
     with open(strings_file, 'r', encoding='utf-8') as f:
         strings = f.read().splitlines()
-    
+
     # Toss out all dictionary words that are longer than the longest string
     max_string_length = max([len(string) for string in strings])
     word_list = [word for word in word_list if len(word) <= max_string_length and len(word) >= min_length]
@@ -24,7 +32,7 @@ def find_strings_containing_words(strings_file, dict_file, min_length=0):
 
         # Check each word in the string
         for word in words:
-            for dict_word in word_list:            
+            for dict_word in word_list:
                 # Check if the word is in the word list
                 if dict_word in word:
                     # If the word is in the list, print the string and break out of the loop
@@ -39,8 +47,12 @@ def reformat_strings_file(strings_file):
     """
     with open(strings_file, 'r', encoding='utf-8') as f:
         strings = f.read().splitlines()
+        # Make backup of original file
+        with open(f'{strings_file}.bak', 'w+', encoding='utf-8') as f2:
+            for string in strings:
+                f2.write(f'{string}\n')
 
-    with open(f'strings_file.txt', 'w+', encoding='utf-8') as f:
+    with open(strings_file, 'w+', encoding='utf-8') as f:
         for string in strings:
             word = string.split()[0]
             f.write(f'{word}\n')

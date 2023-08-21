@@ -1,8 +1,8 @@
 """
-swsf_search.py
+hash_search.py
 author: theonlyzac
-date: May 9 2023
-version: 1.0
+date: August 21 2023
+version: 1.1
 
 Brute force searches for a password given a hash and a length.
 """
@@ -33,7 +33,7 @@ def dictionary_search(dict_file: str, goal_hashes: list, max_length: int = 0) ->
 
             if max_length != 0 and word_length > max_length:
                 continue
-            
+
             word_hash = swsf_scramble(word)
             #if DEBUG:
             #    print(f'Checking {word} ({word_hash})')
@@ -68,7 +68,7 @@ def brute_force_search(goal_hashes: list, max_length: int = 0, outfile: str = No
     start = time.time()
     now = start
     num_words_checked = 0
-    
+
     for length in range(1, max_length + 1):
         for i in range(0, 26**length):
             # Estimate time remaining every 100k words
@@ -80,13 +80,13 @@ def brute_force_search(goal_hashes: list, max_length: int = 0, outfile: str = No
                 words_remaining = num_possible_words - num_words_checked
                 time_remaining = words_remaining / wps
 
-                print(f'Progress: {percent_done:.2f}% ({num_matches} matches found, ~{time_remaining:.0f}s remaining)', end='\r')
+                print(f'Progress: {percent_done * 100:.2f}% ({num_matches} matches found, ~{time_remaining:.0f}s remaining)', end='\r')
 
             # Generate word
             word = ''
             for j in range(0, length):
                 word += chr(ord('a') + (i // (26**j)) % 26)
-            
+
             # Scramble the word
             word_hash = swsf_scramble(word)
             if DEBUG:
@@ -105,21 +105,25 @@ def brute_force_search(goal_hashes: list, max_length: int = 0, outfile: str = No
                 if DEBUG:
                     print(f'Match found: {word} ({word_hash})')
 
-    return matches    
+    print(f'Results have been written to {outfile}.')
+    return matches
 
 def main(argc, argv):
+    """
+    Main function, called when the program is run.
+    """
     if argc == 1:
         print(f'Usage:\n\tpython {sys.argv[0]} [-l MAX_LENGTH] [-d DICT_FILE] HASH1 [HASH2 ...]')
         print('If a dictionary file is not specified, it will brute force search all possible hashes.')
         return
-    
+
     # Setup arguments
     parser = argparse.ArgumentParser(description='Brute force searches for a password given a hash and a length.')
     parser.add_argument('hashes', metavar='HASH', type=str, nargs='+', help='the hash to search for')
     parser.add_argument('-l', '--length', metavar='LENGTH', type=int, default=0, help='the length of the password to search for')
     parser.add_argument('-d', '--dict', metavar='DICT_FILE', type=str, help='the dictionary file to search')
     args = parser.parse_args()
-    
+
     goal_hashes = args.hashes
     max_length = args.length
     dict_file = args.dict
@@ -133,7 +137,7 @@ def main(argc, argv):
     else:
         print(f"Starting dictionary search using {dict_file}...")
         matches = dictionary_search(dict_file, goal_hashes, max_length)
-    
+
     end = time.time()
     print(f'Found {len(matches)} matches in {(end - start):.2f}s.')
     print('\n'.join(matches))
