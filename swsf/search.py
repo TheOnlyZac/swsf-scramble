@@ -11,11 +11,16 @@ from scramble import swsf_scramble
 
 DEBUG = False
 
-def dictionary_search(dict_file: str, goal_hashes: list, max_length: int = 0) -> int:
+#todo implement min length and writing to output file
+def dictionary_search(dict_file: str, goal_hashes: list, max_length: int = 8, min_length: int = 1, outfile: str = 'matches.txt') -> int:
     """
     Searches for a password in a dictionary file.
 
     @param dict_file the dictionary file to search
+    @param goal_hashes the list of hashes to search for
+    @param max_length the max length of the passwords to check
+    @param min_length the min length of the passwords to check
+    @param outfile the file to write the results to
     """
     matches = []
 
@@ -42,12 +47,13 @@ def dictionary_search(dict_file: str, goal_hashes: list, max_length: int = 0) ->
 
     return matches
 
-def brute_force_search(goal_hashes: list, max_length: int = 0, outfile: str = None) -> list:
+def brute_force_search(goal_hashes: list, max_length: int = 8, min_length = 1, outfile: str = 'matches.txt') -> list:
     """
     Searches for a password by brute force.
 
     @param goal_hashes the list of hashes to search for
     @param max_length the max length of the passwords to check
+    @param min_length the min length of the passwords to check
     @param outfile the file to write the results to
     """
     matches = []
@@ -57,17 +63,20 @@ def brute_force_search(goal_hashes: list, max_length: int = 0, outfile: str = No
         with open(outfile, 'w+', encoding='utf-8') as f:
             f.write(f'---- Hash collisions for {goal_hashes} with length {max_length} or less ----\n')
 
-    num_possible_words = 26**max_length
+    num_possible_words = 26**max_length - 26**(min_length-1)
 
-    print(f'Searching for hashes {goal_hashes} of length {max_length} or less...')
-    print(f'There are {num_possible_words:,} possible words to check.')
+    if(max_length == min_length:
+        print(f'Searching for codes matching {goal_hashes} with {max_length} letters...')
+    else:
+        print(f'Searching for codes matching {goal_hashes} between {min_length} and {max_length} letters...')
+    print(f'There are {num_possible_words:,} possible codes to check.')
 
     start = time.time()
     now = start
     num_words_checked = 0
 
-    for length in range(1, max_length + 1):
-        for i in range(0, 26**length):
+    for length in range(min_length, max_length + 1):
+        for i in range(0, num_possible_words):
             # Estimate time remaining every 100k words
             if num_words_checked > 0 and num_words_checked % 100000 == 0:
                 percent_done = num_words_checked / num_possible_words
@@ -110,30 +119,43 @@ def main(argc, argv):
     Main function, called when the program is run.
     """
     if argc == 1:
-        print(f'Usage:\n\tpython {sys.argv[0]} [-l MAX_LENGTH] [-d DICT_FILE] HASH1 [HASH2 ...]')
+        print(f'Usage:\n\tpython {sys.argv[0]} [--max-length N] [--min-length N] [-d DICT_FILE] HASH1 [HASH2 ...] [-o OUTFILE]')
         print('If a dictionary file is not specified, it will brute force search all possible hashes.')
         return
 
     # Setup arguments
     parser = argparse.ArgumentParser(description='Brute force searches for a password given a hash and a length.')
     parser.add_argument('hashes', metavar='HASH', type=str, nargs='+', help='the hash to search for')
-    parser.add_argument('-l', '--length', metavar='LENGTH', type=int, default=0, help='the length of the password to search for')
+    parser.add_argument('--max-length', metavar='MAX_LENGTH', type=int, default=8, help='the max length of the code')
+    parser.add_argument('--min-length', metavar='MIN_LENGTH', type=int, default=0, help='the min length of the code')
     parser.add_argument('-d', '--dict', metavar='DICT_FILE', type=str, help='the dictionary file to search')
+    parser.add_argument('-o', '--outfile', metavar='OUTFILE', type=str, default='matches.txt', help='the file to write the results to')
     args = parser.parse_args()
 
     goal_hashes = args.hashes
-    max_length = args.length
+    max_length = args.max_length
+    min_length = args.min_length
     dict_file = args.dict
+    outfile = args.outfile
+
+    if max_length > min_length:
+        print('Error: max length must be greater than or equal to min length.')
+        return
+    elif max_length < 0 or min_length < 0:
+        print('Error: max length and min length must be greater than or equal to 0.')
+        return
+    elif max_length > 8 or min_length > 8:
+        print('Warning: codes greater than 8 characters cannot be used in-game.')
 
     matches = []
 
     start = time.time()
     if dict_file is None:
         print("Starting brute force search...")
-        matches = brute_force_search(goal_hashes, max_length, 'matches.txt')
+        matches = brute_force_search(goal_hashes, max_length, min_length, outfile)
     else:
         print(f"Starting dictionary search using {dict_file}...")
-        matches = dictionary_search(dict_file, goal_hashes, max_length)
+        matches = dictionary_search(dict_file, goal_hashes, max_length, min_length, outfile)
 
     end = time.time()
     print(f'Found {len(matches)} matches in {(end - start):.2f}s.')
