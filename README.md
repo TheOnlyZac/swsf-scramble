@@ -30,6 +30,7 @@ python swsf_scramble.py <input string>
 ```
 
 For example:
+
 ```bash
 $ python scramble.py DIRECTOR
 2C75827E
@@ -40,36 +41,39 @@ $ python scramble.py DIRECTOR
 To search for a cheat code by hash, use the `search.py` script as follows:
 
 ```bash
-python search.py [-l MAX_LENGTH] [-d DICT_FILE] HASH1 [HASH2 ...]
+python search.py [--max_length N] [--min-length N] [-d DICT_FILE] HASH1 [HASH2 ...]
 ```
 
 ### Dictionary search
 
 If you pass a dictionary file to the search script, it will search for cheat codes that are valid words in the dictionary. The dictionary file should be a text file with one word per line. For example:
 ```bash
-$ python3 search.py -l 8 -d /usr/share/dict/words 2C8574D8 2C78839F 2C75827E 6F4E45A6 4975AC40 49758D30 0EB12C00
-Starting dictionary search using /usr/share/dict/words...
-Found 6 matches in 0.23s.
+$ python search.py -d ../words.txt 2C8574D8 2C78839F 2C75827E 6F4E45A6 4975AC40 49758D30 0EB12C00
+Starting dictionary search using ../words.txt...
+Found 8 matches in 1.31s.
+director (2C75827E)
+furfur (49758D30)
+headhunt (2C78839F)
+Kirbie (4975AC40)
 Maggie (4975AC40)
-NPR's (0EB12C00)
+okehs (0EB12C00)
+pew's (0EB12C00)
 Quentin (6F4E45A6)
-director (2C75827E)
-now's (0EB12C00)
-pew's (0EB12C00)1 matches in 0.26s.
-director (2C75827E)
 ```
 
 If you are on linux, a dictionary file can usually be found at `/usr/share/dict/words`.
 
 ### Brute force search
 
-If you do not specify a dictionary file, the search script will perform a brute force search. This will take a long time depending on the length you specify. The results be written to a file called `matches.txt` in the current directory. For example:
+If you do not specify a dictionary file, the script will perform a brute force search. This can take a long time depending on the length you specify. The results be written to a file called `matches.txt` in the current directory. For example:
+
 ```bash
-$ python3 search.py -l 6 2C8574D8 2C78839F 2C75827E 6F4E45A6 4975AC40 49758D30 0EB12C00
+$ python search.py --min-length 4 --max-length 6 2C8574D8 2C78839F 2C75827E 6F4E45A6 4975AC40 49758D30 
+0EB12C00
 Starting brute force search...
-Searching for hashes ['2C8574D8', '2C78839F', '2C75827E', '6F4E45A6', '4975AC40', '49758D30', '0EB12C00'] of length 6 or less...
-There are 308,915,776 possible words to check.
-Progress: 0.02% (244 matches found, ~2029s remaining)
+Searching for codes matching ['2C8574D8', '2C78839F', '2C75827E', '6F4E45A6', '4975AC40', '49758D30', '0EB12C00'] between 4 and 6 letters...
+There are 308,898,200 possible codes to check.
+Progress: 0.84% (0 matches found, ~2986s remaining)
 ```
 
 ## Dictionary generation
@@ -80,4 +84,33 @@ If you want to generate a dictionary file for searching, use the `gen_dict.py` s
 python gen_dict.py INPUT_FILE [-o OUTPUT_FILE] [-e ENCODING]
 ```
 
-The input cant This will output a dictionary file containing all the words from the input file.
+The input can be any text file, and the output will be a text file containing all the words from the input file on separate lines.
+
+If the input encoding is not UTF-8 you must specify it. The output file encoding will always be UTF-8. Also, if you don't specify the output file name, it will be the input file name with `.dict` appended to the end.
+
+For example:
+
+```bash
+# starwars.txt
+
+A long time ago, in a galaxy far, far away
+```
+
+```bash
+$ python gen_dict.py starwars.txt -o words.txt
+```
+
+```bash
+# words.txt
+
+A
+long
+time
+ago
+in
+a
+galaxy
+far
+far
+away
+```
