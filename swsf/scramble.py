@@ -1,14 +1,7 @@
 """
-swsf_scramble.py
-author: theonlyzac
-date: May 9 2023
-version: 1.1
+scramble.py
 
-Hashes a string according to the cheat code scrambling algorithm in Star Wars Jedi Starfighter. Credit to modeco80 for reversing the hash function.
-
-v1.1
-Changed output of swsf_scramble from int to hex string.
-Tweaked output of formatHex to remove the leading 0x.
+This file contains the scrambling algorithm used by Star Wars: Jedi Starfighter.
 """
 import sys
 

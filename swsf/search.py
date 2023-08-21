@@ -1,16 +1,13 @@
 """
-hash_search.py
-author: theonlyzac
-date: August 21 2023
-version: 1.1
+search.py
 
-Brute force searches for a password given a hash and a length.
+This file contains the code for searching for a password given a hash and a length
 """
 import os
 import sys
 import time
 import argparse
-from swsf_scramble import swsf_scramble
+from scramble import swsf_scramble
 
 DEBUG = False
 

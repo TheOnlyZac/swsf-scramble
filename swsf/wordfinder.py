@@ -1,10 +1,7 @@
 """
-find_words_in_codes.py
-author: theonlyzac
-date: August 21 2023
-version: 1.1
+wordfinder.py
 
-Finds codes containing words from a given dictionary.
+This file contains the code for finding valid English words in a list of strings.
 """
 import sys
 
