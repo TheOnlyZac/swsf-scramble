@@ -1,12 +1,10 @@
-# swsf cheat code scripts
+# SWSF Scrambler Scripts
 
-This module implements the cheat code scrambling algorithm from Star Wars: Jedi Starfighter. It can be used to generate hashes for cheat codes, and search for cheat codes by hash.
+This module implements the cheat code scrambling algorithm from Star Wars: Jedi Starfighter. It can be used to generate code hashes and search for cheat codes by hash.
 
 ## Setup
 
 Install dependencies with `pip install -r requirements.txt`.
-
-<hr/>
 
 ## Hashing
 
@@ -21,8 +19,6 @@ For example:
 $ python swsf_scramble.py DIRECTOR
 2C75827E
 ```
-
-<hr/>
 
 ## Searching
 
@@ -47,6 +43,8 @@ now's (0EB12C00)
 pew's (0EB12C00)1 matches in 0.26s.
 director (2C75827E)
 ```
+
+If you are on linux, a dictionary file can be found at `/usr/share/dict/words`.
 
 ### Brute force search
 
