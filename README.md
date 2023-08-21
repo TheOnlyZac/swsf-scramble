@@ -6,6 +6,21 @@ This repository contains scripts for working with the cheat code scrambling algo
 
 Install dependencies with `pip install -r requirements.txt`.
 
+## Overview
+
+The Star Wars: Jedi Starfighter cheat code screen has a text box that accepts any string from 1-8 characters. When the player enters a string, the game scrambles it using a simple algorithm and compares the result to a list of known cheat codes. If the scrambled string matches a cheat code, the cheat is activated.
+
+The scrambling algorithm is as follows:
+1. Convert the input string to lowercase.
+2. Insert `code_` at the beginning of the string.
+3. Set the hash value to 0x0.
+3. For each character in the string:
+    1. Convert the character to its ASCII value.
+    2. Multiply the current hash value by 0x5.
+    3. Add the ASCII value to the hash value.
+
+Due to the way the algorithm works, there are many different strings that will produce the same hash (these are called [hash collisions](https://en.wikipedia.org/wiki/Hash_collision)). For example, the string `JARJAR` will produce the hash `2C75827E`, but so will `GOXBOW`, `JOISTY`, `LDONUT`, and countless others. This means that the game will accept any of those strings as a valid cheat codes.
+
 ## Hashing
 
 To generate a hash for a string, use the `scramble.py` script as follows:

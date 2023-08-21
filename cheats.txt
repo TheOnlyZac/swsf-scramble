@@ -1,5 +1,5 @@
 Name        Hash        Description
-----------------------------------------------------------------
+-----------------------------------------------------
 PNYRCADE	2C8574D8    Unlock Everything
 HEADHUNT	2C78839F    Unlock Z-95 Headhunter ship
 DIRECTOR    2C75827E	Fly-By Mode
