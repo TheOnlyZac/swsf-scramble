@@ -3,6 +3,7 @@ __pycache__
 
 *.txt
 *.dict
+*.bak
 
 out
 ignore

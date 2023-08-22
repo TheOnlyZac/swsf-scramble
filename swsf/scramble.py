@@ -7,7 +7,7 @@ import sys
 
 def swsf_scramble(code):
     """
-    Returns the has for a given string.
+    Returns the hash for a given string.
 
     @param code the plaintext code to hash
     """

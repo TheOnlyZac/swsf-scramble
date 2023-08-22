@@ -26,7 +26,7 @@ Due to the way the algorithm works, there are many different strings that will p
 To generate a hash for a string, use the `scramble.py` script as follows:
 
 ```bash
-python swsf_scramble.py <input string>
+python scramble.py <input string>
 ```
 
 For example:
