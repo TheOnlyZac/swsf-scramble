@@ -6,7 +6,7 @@ This file contains the code for searching for a password given a hash and a leng
 import os
 import time
 import argparse
-from scramble import swsf_scramble
+from .scramble import swsf_scramble
 
 DEBUG = False
 
