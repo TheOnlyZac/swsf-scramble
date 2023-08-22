@@ -41,7 +41,7 @@ $ python scramble.py DIRECTOR
 To search for a cheat code by hash, use the `search.py` script as follows:
 
 ```bash
-python search.py [--max_length N] [--min-length N] [-d DICT_FILE] HASH1 [HASH2 ...]
+python search.py [--max_length N] [--min-length N] [-d DICT_FILE] [-p PREFIX] HASH1 [HASH2 ...]
 ```
 
 ### Dictionary search
