@@ -69,7 +69,7 @@ def main(argc, argv):
     reformat_strings_file(strings_file)
 
     # Find valid English words in the list of hashes
-    find_strings_containing_words('strings_file.txt', dict_file, 4)
+    find_strings_containing_words(strings_file, dict_file, 4)
 
 if __name__ == '__main__':
     main(len(sys.argv), sys.argv)
