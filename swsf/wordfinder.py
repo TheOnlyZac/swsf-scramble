@@ -3,9 +3,9 @@ wordfinder.py
 
 This file contains the code for finding valid English words in a list of strings.
 """
-import sys
+import argparse
 
-def find_strings_containing_words(strings_file, dict_file, min_length=0):
+def find_codes_containing_words(codes_file: str, dict_file: str, min_length: int = 0, outfile: str = None):
     """
     Finds valid English words in a list of strings.
 
@@ -13,30 +13,42 @@ def find_strings_containing_words(strings_file, dict_file, min_length=0):
     """
     # Define a list of valid English words
     with open(dict_file, 'r', encoding='utf-8') as f:
-        word_list = [word.strip().lower() for word in f]
+        dict_words = [word.strip().lower() for word in f]
 
-    with open(strings_file, 'r', encoding='utf-8') as f:
-        strings = f.read().splitlines()
+    with open(codes_file, 'r', encoding='utf-8') as f:
+        codes = f.read().splitlines()
 
-    # Toss out all dictionary words that are longer than the longest string
-    max_string_length = max([len(string) for string in strings])
-    word_list = [word for word in word_list if len(word) <= max_string_length and len(word) >= min_length]
+    # Toss out all dictionary words that are longer than the longest string or shorter than the minimum length
+    max_code_length = max([len(code) for code in codes])
+    dict_words = [word for word in dict_words if len(word) <= max_code_length and len(word) >= min_length]
+
+    # Print some info
+    print("Searching for words in the list of codes...")
+    print(f'Max word length: {max_code_length}')
+    print(f'Number of words in dictionary: {len(dict_words)}')
 
     # Check each string in the list
-    for string in strings:
-        # Split the string into individual words
-        words = string.split()
+    matches = []
+    for code in codes:
+        #print(f'Checking {word} in {string}')
+        for dict_word in dict_words:
+            #print(f'Checking {dict_word} in {string}')
+            # Check if the word is in the word list
+            if dict_word in code:
+                # If the word is in the list, print the string and break out of the loop
+                if outfile is None:
+                    print(f'{dict_word} in {code}')
+                matches.append(f'{dict_word} in {code}')
+                break
 
-        # Check each word in the string
-        for word in words:
-            for dict_word in word_list:
-                # Check if the word is in the word list
-                if dict_word in word:
-                    # If the word is in the list, print the string and break out of the loop
-                    print(string)
-                    break
+    if outfile is not None:
+        print(f'Writing {len(matches)} matches to {outfile}')
+        with open(outfile, 'w+', encoding='utf-8') as f:
+            f.write(f'Codes from {codes_file} containing words from {dict_file} at least {min_length} letters:\n\n')
+            for match in matches:
+                f.write(f'{match}\n')
 
-def reformat_strings_file(strings_file):
+def reformat_strings_file(strings_file: str) -> None:
     """
     Reformats a list of strings to be one string per line.
 
@@ -54,22 +66,28 @@ def reformat_strings_file(strings_file):
             word = string.split()[0]
             f.write(f'{word}\n')
 
-def main(argc, argv):
+def main():
     """
     Finds strings in a list of hashes that contain valid words from the dictionary.
     """
-    if argc == 1:
-        print(f'Usage:\n\tpython {sys.argv[0]} STRINGS_FILE DICTIONARY_FILE')
-        return
 
-    # Read the dictionary file
-    strings_file = argv[1]
-    dict_file = argv[2]
+    # Parse command line arguments
+    parser = argparse.ArgumentParser(description='Finds codes in a list that contain valid words from the dictionary.')
+    parser.add_argument('codes_file', help='the file containing the list of codes')
+    parser.add_argument('dict_file', help='the file containing the dictionary')
+    parser.add_argument('-l', '--min-length', type=int, default=0, help='the minimum length of a word to check for')
+    parser.add_argument('-o', '--outfile', default='word_matches.txt', help='the file to write the matches to')
 
-    reformat_strings_file(strings_file)
+    args = parser.parse_args()
+    codes_file = args.codes_file
+    dict_file = args.dict_file
+    min_length = args.min_length
+    outfile = args.outfile
+
+    reformat_strings_file(codes_file)
 
     # Find valid English words in the list of hashes
-    find_strings_containing_words(strings_file, dict_file, 4)
+    find_codes_containing_words(codes_file, dict_file, min_length, outfile)
 
 if __name__ == '__main__':
-    main(len(sys.argv), sys.argv)
+    main()
