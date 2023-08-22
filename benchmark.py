@@ -14,12 +14,12 @@ def benchmark(num_hashes: int = 500_000):
     """
     test_codes = ["password", "pnyrcade", "headhunt", "director", "quentin", "maggie", "jarjar", "nohud", "darkside", "credits"]
 
-    print(f"Benchmarking swsf_scramble with {len(test_codes)} trials of {num_hashes} hashes each...")
+    print(f"Benchmarking swsf_scramble with {len(test_codes)} trials of {num_hashes:,} hashes each...")
 
     total_times = []
     for code in test_codes:
         start = timeit.default_timer()
-        
+
         for _ in range(num_hashes):
             scramble.swsf_scramble(code)
 

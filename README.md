@@ -1,6 +1,6 @@
 # SWSF Scramble Scripts
 
-This repository contains scripts for working with the cheat code scrambling algorithm from [Star Wars: Jedi Starfighter](https://en.wikipedia.org/wiki/Star_Wars:_Jedi_Starfighter). They can be used to generate code hashes and search for cheat codes by hash using brute force or a dictionary list.
+This module comprises scripts for working with the cheat code scrambling algorithm from [Star Wars: Jedi Starfighter](https://en.wikipedia.org/wiki/Star_Wars:_Jedi_Starfighter). They can be used to generate code hashes and search for cheat codes by hash using brute force or a dictionary list.
 
 ## Setup
 

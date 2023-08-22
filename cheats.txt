@@ -3,7 +3,9 @@ Name        Hash        Description
 PNYRCADE	2C8574D8    Unlock Everything
 HEADHUNT	2C78839F    Unlock Z-95 Headhunter ship
 DIRECTOR    2C75827E	Fly-By Mode
-QUENTIN	    6F4E45A6    God Mode
+QUENTIN	    6F4E45A6    Invincibility (NTSC-U version)
 MAGGIE	    4975AC40    Hidden programmer message
 JARJAR      49758D30    Invert All Controls
 NOHUD	    0EB12C00    Turn Off HUD
+DARKSIDE    2C73AF55    Invincibility (NTSC-J version)
+CREDITS     6F4AC4D0    Play the credits (NTSC-J only)
